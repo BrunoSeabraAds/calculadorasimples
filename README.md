@@ -1,6 +1,6 @@
 # Calculadora em HTML
 
-Projeto simples de uma calculadora desenvolvida com HTML, CSS e JavaScript.
+Projeto simples de uma calculadora desenvolvida com HTML.
 
 ## Sobre o projeto
 
