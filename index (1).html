@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculadora</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #1a1a2e;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: 'Courier New', monospace;
+    }
+
+    h1 {
+      color: #e0e0e0;
+      margin-bottom: 24px;
+      font-size: 22px;
+      letter-spacing: 2px;
+    }
+
+    .calculadora {
+      background-color: #16213e;
+      border-radius: 16px;
+      padding: 24px;
+      width: 300px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+
+    #display {
+      background-color: #0f3460;
+      color: #e0e0e0;
+      font-size: 28px;
+      text-align: right;
+      padding: 16px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      min-height: 64px;
+      word-break: break-all;
+      border: none;
+      width: 100%;
+    }
+
+    .botoes {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    button {
+      background-color: #1a1a2e;
+      color: #e0e0e0;
+      border: 1px solid #0f3460;
+      border-radius: 10px;
+      font-size: 18px;
+      padding: 16px;
+      cursor: pointer;
+      transition: background 0.15s;
+      font-family: 'Courier New', monospace;
+    }
+
+    button:hover {
+      background-color: #0f3460;
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+    .btn-operador {
+      background-color: #e94560;
+      color: white;
+      border-color: #e94560;
+    }
+
+    .btn-operador:hover {
+      background-color: #c73652;
+    }
+
+    .btn-igual {
+      background-color: #0f3460;
+      color: white;
+      grid-column: span 2;
+    }
+
+    .btn-igual:hover {
+      background-color: #1a4a80;
+    }
+
+    .btn-limpar {
+      grid-column: span 2;
+      background-color: #444;
+      color: white;
+      border-color: #555;
+    }
+
+    .btn-limpar:hover {
+      background-color: #555;
+    }
+
+    footer {
+      margin-top: 20px;
+      color: #555;
+      font-size: 13px;
+      font-family: 'Courier New', monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>// calculadora</h1>
+
+  <div class="calculadora">
+    <div id="display">0</div>
+
+    <div class="botoes">
+      <button class="btn-limpar" onclick="limpar()">C</button>
+      <button class="btn-operador" onclick="apagar()">⌫</button>
+      <button class="btn-operador" onclick="adicionar('%')">%</button>
+
+      <button onclick="adicionar('7')">7</button>
+      <button onclick="adicionar('8')">8</button>
+      <button onclick="adicionar('9')">9</button>
+      <button class="btn-operador" onclick="adicionar('/')">÷</button>
+
+      <button onclick="adicionar('4')">4</button>
+      <button onclick="adicionar('5')">5</button>
+      <button onclick="adicionar('6')">6</button>
+      <button class="btn-operador" onclick="adicionar('*')">×</button>
+
+      <button onclick="adicionar('1')">1</button>
+      <button onclick="adicionar('2')">2</button>
+      <button onclick="adicionar('3')">3</button>
+      <button class="btn-operador" onclick="adicionar('-')">−</button>
+
+      <button onclick="adicionar('0')">0</button>
+      <button onclick="adicionar('.')">.</button>
+      <button class="btn-operador" onclick="adicionar('+')">+</button>
+
+      <button class="btn-igual" onclick="calcular()">=</button>
+    </div>
+  </div>
+
+  <footer>feito por bruno &lt;3</footer>
+
+  <script>
+    let expressao = '';
+
+    function atualizar() {
+      const display = document.getElementById('display');
+      display.textContent = expressao || '0';
+    }
+
+    function adicionar(valor) {
+      // evita dois operadores seguidos
+      const operadores = ['+', '-', '*', '/'];
+      const ultimo = expressao.slice(-1);
+
+      if (operadores.includes(valor) && operadores.includes(ultimo)) {
+        expressao = expressao.slice(0, -1);
+      }
+
+      expressao += valor;
+      atualizar();
+    }
+
+    function limpar() {
+      expressao = '';
+      atualizar();
+    }
+
+    function apagar() {
+      expressao = expressao.slice(0, -1);
+      atualizar();
+    }
+
+    function calcular() {
+      try {
+        // substitui % por /100 para calcular porcentagem
+        let calculo = expressao.replace(/%/g, '/100');
+        expressao = String(eval(calculo));
+        atualizar();
+      } catch (e) {
+        document.getElementById('display').textContent = 'Erro';
+        expressao = '';
+      }
+    }
+
+    // suporte ao teclado
+    document.addEventListener('keydown', function(e) {
+      if (!isNaN(e.key) || ['+', '-', '*', '/', '.', '%'].includes(e.key)) {
+        adicionar(e.key);
+      } else if (e.key === 'Enter') {
+        calcular();
+      } else if (e.key === 'Backspace') {
+        apagar();
+      } else if (e.key === 'Escape') {
+        limpar();
+      }
+    });
+  </script>
+
+</body>
+</html>
